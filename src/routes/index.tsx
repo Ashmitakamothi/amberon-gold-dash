@@ -1,26 +1,56 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "@/components/amberon/Navbar";
+import { AnnouncementBar } from "@/components/amberon/AnnouncementBar";
+import { Hero } from "@/components/amberon/Hero";
+import { StatsCards } from "@/components/amberon/StatsCards";
+import { ContinueLearning } from "@/components/amberon/ContinueLearning";
+import { TrendingCourses } from "@/components/amberon/TrendingCourses";
+import { Recommended } from "@/components/amberon/Recommended";
+import { Scheduler } from "@/components/amberon/Scheduler";
+import { Certificates } from "@/components/amberon/Certificates";
+import { Rewards } from "@/components/amberon/Rewards";
+import { MobileTabs } from "@/components/amberon/MobileTabs";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "Dashboard — Amberon Training Institute" },
+      {
+        name: "description",
+        content:
+          "Your premium learning dashboard at Amberon Training Institute. Track progress, certificates, and curated courses.",
+      },
+    ],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
+      <Navbar />
+      <AnnouncementBar />
+
+      <main className="mx-auto flex max-w-[1280px] flex-col gap-10 px-6 py-8 md:py-10">
+        <Hero />
+        <StatsCards />
+        <ContinueLearning />
+        <TrendingCourses />
+        <Recommended />
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <Scheduler />
+          <Rewards />
+        </div>
+
+        <Certificates />
+
+        <footer className="border-t border-border pt-6 text-xs text-muted-foreground">
+          © 2026 Amberon Training Institute. Crafted for learners.
+        </footer>
+      </main>
+
+      <MobileTabs />
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
