@@ -1,59 +1,74 @@
+import { useEffect, useState } from "react";
 import {
   TrendingUp,
   Layers,
-  ShieldCheck,
-  GraduationCap,
+  ClipboardCheck,
+  Award,
   ArrowUpRight,
 } from "lucide-react";
 
 type StatVariant = "neutral" | "blue" | "gold" | "green";
+type StatusKind =
+  | "in-progress"
+  | "completed"
+  | "passed"
+  | "available"
+  | "not-unlocked"
+  | "locked"
+  | "eligible"
+  | "issued"
+  | "not-eligible"
+  | "failed";
 
 type Stat = {
   title: string;
-  value: string;
-  subtext: string;
-  detail?: string;
   Icon: typeof TrendingUp;
   variant: StatVariant;
-  progress?: number; // 0–100
-  status?: "in-progress" | "ready" | "done";
+  // Card 1
+  progress?: number;
+  progressLabel?: string;
+  // Generic main display
+  mainValue?: string;
+  mainTone?: "gold" | "neutral";
+  status?: StatusKind;
+  subtext: string;
+  helper?: string;
 };
 
 const STATS: Stat[] = [
   {
     title: "Course Progress",
-    value: "78%",
-    subtext: "Professional Trading Course",
-    detail: "Day 2 in progress",
     Icon: TrendingUp,
     variant: "neutral",
     progress: 78,
-  },
-  {
-    title: "Modules Completed",
-    value: "6 / 8",
-    subtext: "Sessions completed",
-    detail: "Technical Analysis ✓",
-    Icon: Layers,
-    variant: "blue",
-  },
-  {
-    title: "Risk Framework",
-    value: "In Progress",
-    subtext: "Discipline & risk rules training",
-    detail: "Daily drawdown • Position sizing",
-    Icon: ShieldCheck,
-    variant: "gold",
+    progressLabel: "78% Completed",
+    subtext: "Day 2 in progress",
     status: "in-progress",
   },
   {
-    title: "Assessment Readiness",
-    value: "Ready",
-    subtext: "Final evaluation eligibility",
-    detail: "70% required to pass",
-    Icon: GraduationCap,
+    title: "Sessions Completed",
+    Icon: Layers,
+    variant: "blue",
+    mainValue: "6 / 12",
+    mainTone: "gold",
+    subtext: "Last session: Technical Indicators",
+    helper: "Keep going — you’re halfway there",
+  },
+  {
+    title: "Exam Status",
+    Icon: ClipboardCheck,
+    variant: "gold",
+    status: "in-progress",
+    subtext: "Attempts: 1 / 2",
+    helper: "Final exam unlocks at 100%",
+  },
+  {
+    title: "Certification Status",
+    Icon: Award,
     variant: "green",
-    status: "ready",
+    status: "not-eligible",
+    subtext: "Complete all sessions to unlock exam",
+    helper: "❌ Certificate not yet available",
   },
 ];
 
@@ -100,12 +115,24 @@ const DOTS: Array<
   ],
 ];
 
-function StatusPill({ status }: { status: NonNullable<Stat["status"]> }) {
-  const map = {
-    "in-progress": { bg: "#FFF7ED", color: "#D68910", dot: "#F5B041", label: "In Progress" },
-    ready: { bg: "#F0FDF4", color: "#15803D", dot: "#22C55E", label: "Ready" },
-    done: { bg: "#EFF6FF", color: "#1D4ED8", dot: "#3B82F6", label: "Completed" },
-  }[status];
+const STATUS_MAP: Record<
+  StatusKind,
+  { bg: string; color: string; dot: string; label: string }
+> = {
+  "in-progress":  { bg: "#FFF7ED", color: "#D68910", dot: "#F5B041", label: "In Progress" },
+  available:      { bg: "#FFF7ED", color: "#D68910", dot: "#F5B041", label: "Available" },
+  eligible:       { bg: "#F0FDF4", color: "#047857", dot: "#10B981", label: "Eligible" },
+  passed:         { bg: "#F0FDF4", color: "#047857", dot: "#10B981", label: "Passed" },
+  completed:      { bg: "#F0FDF4", color: "#047857", dot: "#10B981", label: "Completed" },
+  issued:         { bg: "#F0FDF4", color: "#047857", dot: "#10B981", label: "Issued" },
+  "not-unlocked": { bg: "#F3F4F6", color: "#6B7280", dot: "#9CA3AF", label: "Not Unlocked" },
+  locked:         { bg: "#F3F4F6", color: "#6B7280", dot: "#9CA3AF", label: "Locked" },
+  "not-eligible": { bg: "#F3F4F6", color: "#6B7280", dot: "#9CA3AF", label: "Not Eligible" },
+  failed:         { bg: "#FEF2F2", color: "#B91C1C", dot: "#EF4444", label: "Failed" },
+};
+
+function StatusPill({ status }: { status: StatusKind }) {
+  const map = STATUS_MAP[status];
   return (
     <span
       className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
@@ -118,6 +145,13 @@ function StatusPill({ status }: { status: NonNullable<Stat["status"]> }) {
 }
 
 export function StatsCards() {
+  // Animate the progress bar on mount
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const t = window.setTimeout(() => setProgress(78), 120);
+    return () => window.clearTimeout(t);
+  }, []);
+
   return (
     <section>
       <style>{`
@@ -177,6 +211,13 @@ export function StatsCards() {
         @media (prefers-reduced-motion: reduce) {
           .amberon-dot { animation: none !important; }
           .amberon-stat-card { transition: none; }
+          .amberon-progress-fill { transition: none !important; }
+        }
+        .amberon-progress-fill {
+          height: 100%;
+          border-radius: 9999px;
+          background: linear-gradient(90deg, #F5B041, #D68910);
+          transition: width 1100ms cubic-bezier(0.2, 0.8, 0.2, 1);
         }
       `}</style>
 
@@ -193,9 +234,20 @@ export function StatsCards() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {STATS.map((stat, idx) => {
-          const { title, value, subtext, detail, Icon, variant, progress, status } = stat;
+          const {
+            title,
+            Icon,
+            variant,
+            progressLabel,
+            mainValue,
+            mainTone,
+            status,
+            subtext,
+            helper,
+          } = stat;
           const dots = DOTS[idx];
-          const isStatus = !!status;
+          const isProgressCard = typeof stat.progress === "number";
+
           return (
             <div
               key={title}
@@ -233,39 +285,51 @@ export function StatsCards() {
                 {title}
               </p>
 
+              {/* Main value area */}
               <div className="relative z-10 mt-2">
-                {isStatus ? (
-                  <StatusPill status={status!} />
-                ) : (
+                {isProgressCard ? (
                   <p
-                    className="text-3xl font-semibold tracking-tight"
+                    className="text-2xl font-semibold tracking-tight"
                     style={{ color: "#D68910" }}
                   >
-                    {value}
+                    {progressLabel}
                   </p>
-                )}
+                ) : mainValue ? (
+                  <p
+                    className="text-3xl font-semibold tracking-tight"
+                    style={{ color: mainTone === "gold" ? "#D68910" : "#111827" }}
+                  >
+                    {mainValue}
+                  </p>
+                ) : status ? (
+                  <StatusPill status={status} />
+                ) : null}
               </div>
+
+              {/* Status pill below value when both exist */}
+              {(isProgressCard || mainValue) && status && (
+                <div className="relative z-10 mt-2">
+                  <StatusPill status={status} />
+                </div>
+              )}
 
               <p className="relative z-10 mt-2 text-xs text-muted-foreground">{subtext}</p>
 
-              {typeof progress === "number" && (
+              {/* Animated progress bar (Card 1) */}
+              {isProgressCard && (
                 <div className="relative z-10 mt-3">
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#F3F4F6]">
                     <div
-                      className="h-full rounded-full"
-                      style={{
-                        width: `${progress}%`,
-                        background:
-                          "linear-gradient(90deg, #F5B041, #D68910)",
-                      }}
+                      className="amberon-progress-fill"
+                      style={{ width: `${progress}%` }}
                     />
                   </div>
                 </div>
               )}
 
-              {detail && (
+              {helper && (
                 <p className="relative z-10 mt-2 text-[11px] font-medium tracking-wide text-muted-foreground">
-                  {detail}
+                  {helper}
                 </p>
               )}
             </div>
