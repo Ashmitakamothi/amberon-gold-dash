@@ -284,6 +284,13 @@ export function StatsCards() {
               className="amberon-stat-card group rounded-xl border border-border p-5 shadow-soft"
               style={{ background: GRADIENTS[variant] }}
             >
+              <div className="amberon-wave" aria-hidden="true">
+                <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                  <path d="M-20 220 C 80 180, 160 260, 260 210 S 420 180, 520 220" stroke="rgba(0,0,0,0.05)" strokeWidth="1" fill="none" />
+                  <path d="M-20 250 C 90 210, 180 290, 280 240 S 440 210, 540 250" stroke="rgba(0,0,0,0.045)" strokeWidth="1" fill="none" className="amberon-wave-line-extra" />
+                  <path d="M-20 190 C 70 150, 170 230, 270 180 S 430 150, 530 190" stroke="rgba(0,0,0,0.04)" strokeWidth="1" fill="none" className="amberon-wave-line-extra" />
+                </svg>
+              </div>
               {dots.map((d, i) => (
                 <span
                   key={i}
