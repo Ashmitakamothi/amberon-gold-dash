@@ -156,24 +156,32 @@ export function StatsCards() {
     <section>
       <style>{`
         @keyframes amberon-float-a {
-          0%, 100% { transform: translate(0, 0); opacity: 0.22; }
-          50% { transform: translate(6px, -8px); opacity: 0.32; }
+          0%, 100% { transform: translate(0, 0); opacity: 0.14; }
+          50% { transform: translate(6px, -8px); opacity: 0.20; }
         }
         @keyframes amberon-float-b {
-          0%, 100% { transform: translate(0, 0); opacity: 0.20; }
-          50% { transform: translate(-7px, -6px); opacity: 0.30; }
+          0%, 100% { transform: translate(0, 0); opacity: 0.13; }
+          50% { transform: translate(-7px, -6px); opacity: 0.20; }
         }
         @keyframes amberon-float-c {
-          0%, 100% { transform: translate(0, 0); opacity: 0.24; }
-          50% { transform: translate(5px, 7px); opacity: 0.30; }
+          0%, 100% { transform: translate(0, 0); opacity: 0.15; }
+          50% { transform: translate(5px, 7px); opacity: 0.20; }
+        }
+        @keyframes amberon-wave-drift {
+          0%   { transform: translate3d(0, 0, 0); }
+          50%  { transform: translate3d(-18px, -6px, 0); }
+          100% { transform: translate3d(0, 0, 0); }
         }
         .amberon-stat-card {
           position: relative;
           overflow: hidden;
           isolation: isolate;
+          border-color: #E0E3E7 !important;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.04);
           transition:
             transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
             box-shadow 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
+            background 280ms ease,
             border-color 280ms ease;
         }
         .amberon-stat-card::before {
@@ -185,14 +193,32 @@ export function StatsCards() {
             linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
             linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
           background-size: 22px 22px;
-          opacity: 0.55;
+          opacity: 0.45;
           pointer-events: none;
           mask-image: radial-gradient(ellipse at 70% 30%, #000 30%, transparent 80%);
         }
         .amberon-stat-card:hover {
           transform: translateY(-3px);
+          background: #FFFFFF !important;
           box-shadow: 0 12px 28px -12px rgba(0,0,0,0.10), 0 0 0 1px rgba(245,176,65,0.18);
-          border-color: rgba(245,176,65,0.35);
+          border-color: rgba(245,176,65,0.35) !important;
+        }
+        .amberon-wave {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+          mask-image: radial-gradient(ellipse at 85% 85%, #000 0%, rgba(0,0,0,0.65) 40%, transparent 78%);
+          -webkit-mask-image: radial-gradient(ellipse at 85% 85%, #000 0%, rgba(0,0,0,0.65) 40%, transparent 78%);
+        }
+        .amberon-wave svg {
+          position: absolute;
+          right: -15%;
+          bottom: -25%;
+          width: 170%;
+          height: 170%;
+          animation: amberon-wave-drift 16s ease-in-out infinite;
+          will-change: transform;
         }
         .amberon-dot {
           position: absolute;
@@ -201,15 +227,19 @@ export function StatsCards() {
           z-index: 0;
           pointer-events: none;
           will-change: transform, opacity;
+          opacity: 0.15;
         }
         .amberon-dot-a { animation: amberon-float-a var(--d, 10s) ease-in-out infinite; }
         .amberon-dot-b { animation: amberon-float-b var(--d, 10s) ease-in-out infinite; }
         .amberon-dot-c { animation: amberon-float-c var(--d, 10s) ease-in-out infinite; }
         @media (max-width: 767px) {
           .amberon-dot-mobile-hide { display: none; }
+          .amberon-wave svg { animation-duration: 22s; }
+          .amberon-wave-line-extra { display: none; }
         }
         @media (prefers-reduced-motion: reduce) {
           .amberon-dot { animation: none !important; }
+          .amberon-wave svg { animation: none !important; }
           .amberon-stat-card { transition: none; }
           .amberon-progress-fill { transition: none !important; }
         }
