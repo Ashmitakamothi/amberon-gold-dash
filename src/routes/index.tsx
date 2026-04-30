@@ -5,7 +5,7 @@ import { Hero } from "@/components/amberon/Hero";
 import { StatsCards } from "@/components/amberon/StatsCards";
 import { ContinueLearning } from "@/components/amberon/ContinueLearning";
 import { LearningJourney } from "@/components/amberon/LearningJourney";
-import { Recommended } from "@/components/amberon/Recommended";
+import { SkillsToMaster } from "@/components/amberon/SkillsToMaster";
 import { Scheduler } from "@/components/amberon/Scheduler";
 import { Certificates } from "@/components/amberon/Certificates";
 import { Rewards } from "@/components/amberon/Rewards";
@@ -36,7 +36,7 @@ function Index() {
         <StatsCards />
         <ContinueLearning />
         <LearningJourney />
-        <Recommended />
+        <SkillsToMaster />
 
         <div className="grid gap-6 lg:grid-cols-2">
           <Scheduler />
