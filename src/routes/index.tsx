@@ -6,9 +6,9 @@ import { StatsCards } from "@/components/amberon/StatsCards";
 import { ContinueLearning } from "@/components/amberon/ContinueLearning";
 import { LearningJourney } from "@/components/amberon/LearningJourney";
 import { SkillsToMaster } from "@/components/amberon/SkillsToMaster";
-import { Scheduler } from "@/components/amberon/Scheduler";
+import { LearningProgress } from "@/components/amberon/LearningProgress";
+import { PracticeChallenge } from "@/components/amberon/PracticeChallenge";
 import { Certificates } from "@/components/amberon/Certificates";
-import { Rewards } from "@/components/amberon/Rewards";
 import { MobileTabs } from "@/components/amberon/MobileTabs";
 
 export const Route = createFileRoute("/")({
@@ -38,9 +38,9 @@ function Index() {
         <LearningJourney />
         <SkillsToMaster />
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          <Scheduler />
-          <Rewards />
+        <div className="grid gap-5 lg:gap-6 lg:grid-cols-2">
+          <LearningProgress />
+          <PracticeChallenge state="active" />
         </div>
 
         <Certificates />
