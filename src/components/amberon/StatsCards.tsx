@@ -73,10 +73,10 @@ const STATS: Stat[] = [
 ];
 
 const GRADIENTS: Record<StatVariant, string> = {
-  neutral: "linear-gradient(135deg, #FFFFFF, #F9FAFB)",
-  blue: "linear-gradient(135deg, #FFFFFF, #F7FBFF)",
-  gold: "linear-gradient(135deg, #FFFFFF, #FFF9F5)",
-  green: "linear-gradient(135deg, #FFFFFF, #F8FFF7)",
+  neutral: "linear-gradient(135deg, #F4F6F8 0%, #EEF1F4 100%)",
+  blue: "linear-gradient(135deg, #F4F6F8 0%, #EAF0F5 100%)",
+  gold: "linear-gradient(135deg, #F4F6F8 0%, #F1EDE6 100%)",
+  green: "linear-gradient(135deg, #F4F6F8 0%, #ECF1ED 100%)",
 };
 
 const DOTS: Array<
