@@ -13,16 +13,6 @@ import { MobileTabs } from "@/components/amberon/MobileTabs";
 
 export const Route = createFileRoute("/")({
   component: Index,
-  head: () => ({
-    meta: [
-      { title: "Dashboard — Amberon Training Institute" },
-      {
-        name: "description",
-        content:
-          "Your premium learning dashboard at Amberon Training Institute. Track progress, certificates, and curated courses.",
-      },
-    ],
-  }),
 });
 
 function Index() {
